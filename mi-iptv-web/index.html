@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DONATELOS TV</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        glass: {
+                            dark: 'rgba(13, 17, 23, 0.65)',
+                            card: 'rgba(22, 27, 34, 0.45)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            glow: 'rgba(99, 102, 241, 0.15)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Hls.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- Parser de M3U -->
+    <script src="https://cdn.jsdelivr.net/npm/iptv-playlist-parser@1.13.0/dist/iptv-playlist-parser.min.js"></script>
+    <style>
+        /* Efecto de Vidrio Líquido (Liquid Glass & Frosted Glass) */
+        .liquid-glass {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .liquid-glass-card {
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .liquid-glass-card:hover {
+            background: rgba(30, 41, 59, 0.5);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Scrollbar personalizado fluido */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-[#030712] text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#030712] to-black">
+
+    <!-- Header / Barra Superior con Liquid Glass -->
+    <header class="liquid-glass sticky top-0 z-50 px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 border-b border-white/5">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 ring-1 ring-white/20">
+                <span class="text-xl">📺</span>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg tracking-wide bg-gradient-to-r from-white via-slate-200 to-indigo-200 bg-clip-text text-transparent">DONATELOS TV</h1>
+                <p id="channelCount" class="text-xs text-indigo-400 font-medium">Listo para cargar</p>
+            </div>
+        </div>
+
+        <!-- Input de Carga M3U -->
+        <div class="flex items-center space-x-2 w-full md:w-auto">
+            <input type="text" id="m3uUrlInput" placeholder="Pega enlace de lista .m3u o .m3u8 aquí..." class="bg-black/40 border border-white/10 focus:border-indigo-500/80 focus:ring-2 focus:ring-indigo-500/20 text-sm rounded-xl px-4 py-2.5 w-full md:w-80 outline-none transition text-slate-200 placeholder-slate-500 backdrop-blur-md">
+            <button id="loadM3uBtn" class="bg-indigo-600/80 hover:bg-indigo-600 text-white font-medium text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30 border border-white/10 shrink-0 backdrop-blur-md">Cargar</button>
+        </div>
+
+        <!-- Buscador -->
+        <div class="w-full md:w-72">
+            <input type="text" id="searchInput" placeholder="Buscar canal..." class="bg-black/40 border border-white/10 focus:border-indigo-500/80 focus:ring-2 focus:ring-indigo-500/20 text-sm rounded-xl px-4 py-2.5 w-full outline-none transition text-slate-200 placeholder-slate-500 backdrop-blur-md">
+        </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar de Categorías con efecto vidrio -->
+        <aside class="w-64 liquid-glass border-r border-white/5 p-4 hidden lg:flex flex-col shrink-0">
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-2">Categorías</h2>
+            <div id="categoriesList" class="space-y-1 overflow-y-auto flex-1 pr-1">
+                <!-- Se inyecta dinámicamente -->
+            </div>
+        </aside>
+
+        <!-- Contenido Central -->
+        <main class="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+            
+            <!-- Reproductor de Video con Liquid Glass -->
+            <div id="playerContainer" class="hidden liquid-glass rounded-2xl p-4 shadow-2xl relative overflow-hidden border border-white/10">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+                        <h2 id="currentChannelName" class="font-semibold text-sm text-slate-200 tracking-wide">Selecciona un canal</h2>
+                    </div>
+                    <button id="closePlayer" class="text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1 rounded-lg text-xs transition border border-white/5">Cerrar reproductor</button>
+                </div>
+                <div class="aspect-video bg-black/60 rounded-xl overflow-hidden border border-white/10 shadow-inner flex items-center justify-center backdrop-blur-xl">
+                    <video id="videoPlayer" controls autoplay class="w-full h-full object-contain"></video>
+                </div>
+            </div>
+
+            <!-- Grilla de Canales -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Canales Disponibles</h2>
+                </div>
+                <div id="channelsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <!-- Se inyectan dinámicamente -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script principal -->
+    <script src="app.js"></script>
+</body>
+</html>
