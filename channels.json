@@ -1,0 +1,79 @@
+[
+  {
+    "id": "ch_1",
+    "name": "ESPN HD",
+    "logo": "",
+    "group": "Deportes",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_2",
+    "name": "ESPN 2 Latin America",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_3",
+    "name": "ESPN 3 Latin America",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_4",
+    "name": "ESPN 4 Latin America",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_5",
+    "name": "ESPN 5 Latin America",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_6",
+    "name": "ESPN 6 Latin America",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_7",
+    "name": "ESPN 7 Latin America",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_8",
+    "name": "ESPN8: The Ocho",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_9",
+    "name": "ESPN Extra Latin America",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_10",
+    "name": "ESPN Latin America",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  },
+  {
+    "id": "ch_11",
+    "name": "ESPN Premium",
+    "logo": "",
+    "group": "sports",
+    "url": "https://aqui-va-el-enlace-m3u8-de-tu-canal.m3u8"
+  }
+]
